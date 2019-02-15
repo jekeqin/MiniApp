@@ -1,0 +1,15 @@
+/* pages/order/detail.wxss */
+.banner{text-align:center;}
+.banner .logo{width:64rpx;height:64rpx;vertical-align:middle;margin:40rpx;border-radius:50%;}
+.banner view{font-size:32rpx;color:#333333;display:inline;}
+.banner .right{width:30rpx;height:30rpx;vertical-align:middle;margin-left:24rpx;}
+
+.money{margin-top:20rpx;font-size:64rpx;color:#333333;text-align:center;}
+
+.status{text-align:center;margin:40rpx 0rpx 70rpx;font-size:30rpx;}
+.pay{color:#32c8cd;}
+
+.row{margin:15rpx 40rpx;}
+.row view{display:inline-block;font-size:30rpx;}
+.row view:first-child{color:#999999;width:170rpx;}
+.row view:last-child{width:500rpx;text-align:right;}

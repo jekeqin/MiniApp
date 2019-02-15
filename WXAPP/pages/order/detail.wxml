@@ -1,0 +1,31 @@
+<!--pages/order/detail.wxml-->
+
+<view class="banner">
+    <image class="logo" src="/source/images/image.jpg"></image>
+    <view>商户名称</view>
+    <image class="right" src="/source/images/right.png"></image>
+</view>
+
+<view class="money">100</view>
+
+<view class="status pay">支付成功</view>
+
+<view class="row">
+    <view>付款方式</view>
+    <view>支付宝支付</view>
+</view>
+
+<view class="row">
+    <view>付款时间</view>
+    <view>2018-5-24 18:53:00</view>
+</view>
+
+<view class="row">
+    <view>赠送云币</view>
+    <view>1</view>
+</view>
+
+<view class="row">
+    <view>订单号</view>
+    <view>1234567890123456</view>
+</view>

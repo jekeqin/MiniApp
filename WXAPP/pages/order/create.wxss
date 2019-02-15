@@ -1,0 +1,22 @@
+/* pages/order/create.wxss */
+page{background-color:#f0f0f0;}
+.money-box{height:198rpx;position:relative;background-color:#ffffff;}
+.money-box view{line-height:198rpx;margin-left:40rpx;font-size:28rpx;}
+.money-box input{height:98rpx;width:670rpx;line-height:98rpx;position:absolute;top:50rpx;right:40rpx;text-align:right;font-size:36rpx;}
+
+.wallet-box{margin-top:20rpx;background-color:#ffffff;position:relative;}
+.wallet-box view{line-height:128rpx;font-size:28rpx;margin-left:40rpx;}
+.wallet-box switch{position:absolute;height:64rpx;top:32rpx;right:40rpx;}
+
+.wallet-view{padding:0rpx 40rpx 30rpx;font-size:28rpx;background-color:#ffffff;color:#999999;}
+.wallet-view text:first-child{color:#00A600;font-weight:bold;}
+.wallet-view text:last-child{color:#FF8000;font-weight:bold;}
+
+.tips{margin:40rpx 40rpx 20rpx;font-size:26rpx;color:#999999;}
+.item{clear:both;padding:0rpx 40rpx;height:100rpx;line-height:100rpx;margin-bottom:1px;background-color:#ffffff;font-size:28rpx;}
+.item image{width:40rpx;height:40rpx;vertical-align:middle;margin-right:32rpx;}
+.item radio{float:right;}
+
+.pay-box{position:fixed;bottom:0;left:0;width:100%;height:110rpx;line-height:110rpx;background-color:#ffffff;font-size:28rpx;padding-left:40rpx;}
+.pay-box text{color:#ff0000;font-weight:bold;}
+.pay-box view{width:220rpx;height:80rpx;line-height:80rpx;text-align:center;position:absolute;bottom:15rpx;right:80rpx;background-color:#32cbcd;color:#ffffff;}

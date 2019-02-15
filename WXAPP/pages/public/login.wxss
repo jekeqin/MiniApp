@@ -1,0 +1,22 @@
+/* pages/public/login.wxss */
+page{overflow:hidden;position:relative;}
+
+.background{width:750rpx;position:fixed;top:0;left:0;z-index:0;}
+
+.form-box{position:fixed;top:0;left:0;width:100%;z-index:2}
+.form-box .close{margin:30rpx 0rpx 0rpx 20rpx;}
+.form-box .logo{text-align:center;margin:100rpx;}
+.form-box .logo image{width:100rpx;height:100rpx;background-color:#ffffff;}
+
+.input-tips{color:rgba(255,255,255,0.5);}
+
+.form-box .tips{font-size:26rpx;margin:0rpx 70rpx;color:#ffffff;}
+.form-box .item{margin:30rpx 70rpx 60rpx;border-bottom:1px solid #ffffff;position:relative;}
+.form-box .item input{color:#ffffff;width:400rpx;font-size:34rpx;height:60rpx;border-radius:0;}
+.form-box .item view{position:absolute;right:0rpx;bottom:5rpx;font-size:26rpx;color:#ffffff;border:1px solid #ffffff;padding:5rpx 15rpx;}
+
+.form-box .submit{margin:60rpx 70rpx;height:74rpx;line-height:74rpx;padding:0rpx;color:#ffffff;background-color:rgba(50,203,205,0.7);font-size:28rpx;}
+
+.copy-box{position:fixed;bottom:50rpx;width:100%;text-align:center;font-size:24rpx;line-height:40rpx;}
+.copy-box view:first-child{color:#ffffff;}
+.copy-box view:last-child{color:rgba(255,255,255,0.5);}

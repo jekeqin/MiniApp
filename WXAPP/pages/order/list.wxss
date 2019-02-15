@@ -1,0 +1,20 @@
+/* pages/order/list.wxss */
+page{background-color:#f0f0f0;}
+
+.item{margin:10rpx 0rpx;background-color:#ffffff;padding:0rpx 40rpx;}
+.item .row{clear:both;overflow:hidden;position:relative;}
+.item .row:first-child{border-bottom:1px solid #f0f0f0;}
+.item .row view:first-child{float:left;font-size:26rpx;color:#666666;line-height:80rpx;width:520rpx;}
+.item .row:first-child view:last-child{float:left;font-size:28rpx;color:#32c8cd;line-height:80rpx;text-align:right;width:150rpx;}
+
+.item .row:nth-child(2){padding:10rpx 0rpx;}
+.row .logo{width:110rpx;height:110rpx;float:left;margin-right:40rpx;border-radius:50%;}
+.row .title{font-size:32rpx;color:#333333;line-height:110rpx;}
+.item .row .right{width:20rpx;height:20rpx;position:absolute;top:60rpx;right:0rpx;}
+
+.item .row:nth-child(3){border-top:1px solid #f0f0f0;height:80rpx;position:relative;}
+.item .row:nth-child(3) view{float:left;}
+.item .row:nth-child(3) image{width:28rpx;height:28rpx;float:left;position:absolute;top:26rpx;}
+.item .row .time{width:400rpx;margin-left:40rpx;line-height:80rpx;font-size:26rpx;color:#666666;}
+.item .row .money{width:230rpx;font-size:42rpx;color:#333333;text-align:right;line-height:80rpx;}
+.item .row .unit{font-size:20rpx;color:#999999;}

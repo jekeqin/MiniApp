@@ -1,0 +1,33 @@
+<!--pages/public/login.wxml-->
+
+<image class="background" src="/source/images/back1.jpg" mode="widthFix"></image>
+
+<view class="form-box">
+<form bindsubmit='formSubmit'>
+    <icon class="close" type="cancel" color="#ffffff" bindtap='goHome'></icon>
+    
+    <view class="logo">
+        <image></image>
+    </view>
+    <view class="tips">手机号</view>
+    <view class="item">
+        <input name="mobile" placeholder='+86' type='number' placeholder-class='input-tips' maxlength='11'></input>
+    </view>
+    <view class="tips">验证码</view>
+    <view class="item">
+        <input name="smsCode" placeholder='请输入验证码' type='number' placeholder-class='input-tips' maxlength='6'></input>
+        <view>获取验证码</view>
+    </view>
+    <view>
+        <button class="submit" form-type='submit'>登录</button>
+    </view>
+    <view>
+        <navigator url='faceReg'>人脸登录</navigator>
+    </view>
+</form>
+</view>
+
+<view class="copy-box">
+    <view>《用户服务协议》</view>
+    <view>登录、即表示同意并注册</view>
+</view>

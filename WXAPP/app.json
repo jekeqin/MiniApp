@@ -1,0 +1,57 @@
+{
+    "pages": [
+        "pages/index/loading",
+        "pages/index/index",
+        "pages/shop/list",
+        "pages/shop/detail",
+        "pages/order/list",
+        "pages/order/detail",
+        "pages/logs/logs",
+        "pages/user/user",
+        "pages/activity/list",
+        "pages/theme/list",
+        "pages/web/web",
+        "pages/shop/search",
+        "pages/public/login",
+        "pages/order/create",
+        "pages/web/vr",
+        "pages/public/faceReg"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "WeChat",
+        "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "首页",
+                "iconPath": "source/images/nav_home.png",
+                "selectedIconPath": "source/images/nav_home_on.png"
+            },
+            {
+                "pagePath": "pages/shop/list",
+                "text": "商家",
+                "iconPath": "source/images/nav_shop.png",
+                "selectedIconPath": "source/images/nav_shop_on.png"
+            },
+            {
+                "pagePath": "pages/order/list",
+                "text": "订单",
+                "iconPath": "source/images/nav_shop.png",
+                "selectedIconPath": "source/images/nav_shop_on.png"
+            },
+            {
+                "pagePath": "pages/user/user",
+                "text": "我的",
+                "iconPath": "source/images/nav_user.png",
+                "selectedIconPath": "source/images/nav_user_on.png"
+            }
+        ]
+    },
+    "plugins": {
+
+    }
+}

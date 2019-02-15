@@ -1,0 +1,20 @@
+/* pages/shop/list.wxss */
+page{background-color:#f0f0f0;}
+
+.channel{background-color:#ffffff;height:70rpx;width:750rpx;white-space:nowrap;}
+.channel view{min-width:60rpx;text-align:center;font-size:26rpx;margin-left:40rpx;line-height:66rpx;display:inline-block;}
+.channel view:last-child{margin-right:40rpx;}
+.channel .active{color:#32c8cd;border-bottom:4rpx solid #32c8cd;}
+
+.list{margin-top:10rpx;background-color:#ffffff;}
+.list .item{margin:0rpx 40rpx;padding:30rpx 0rpx;border-bottom:1rpx solid #e6e6e6;clear:both;overflow:hidden;}
+
+.item .logo-view{float:left;width:280rpx;}
+.item .logo-view .logo{width:280rpx;height:186rpx;margin-right:32rpx;}
+
+.item .text-view{float:left;width:358rpx;margin-left:32rpx;}
+.item .text-view .title{font-size:32rpx;color:#333333;height:90rpx;}
+.item .text-view .type{font-size:24rpx;color:#999999;margin-bottom:26rpx;}
+.item .text-view .addr{font-size:24rpx;color:#333333;width:358rpx;}
+.item .text-view .addr text{float:right;}
+

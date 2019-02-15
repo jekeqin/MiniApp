@@ -1,0 +1,31 @@
+<!--pages/shop/detail.wxml-->
+<view class="banner">
+    <image src="/source/images/image.jpg"></image>
+</view>
+
+<view class="shop">
+    <view class="title">商户名称</view>
+    <view class="type">餐饮</view>
+    <view class="item">
+        <image class="icon" src="/source/images/time.png"></image>
+        <view>09:00-22:00</view>
+    </view>
+    <view class="item">
+        <image class="icon" src="/source/images/addr.png"></image>
+        <view>浙江省杭州市江干区九环路</view>
+        <image class="right" src="/source/images/right.png"></image>
+    </view>
+    <view class="item">
+        <image class="icon" src="/source/images/tel.png"></image>
+        <view>0571-12345678</view>
+        <image class="right" src="/source/images/right.png"></image>
+    </view>
+</view>
+
+<view class="tab">商户详情</view>
+
+<view class="content">
+bag
+</view>
+
+<view class="pay" bindtap='tapPay'>立即支付</view>

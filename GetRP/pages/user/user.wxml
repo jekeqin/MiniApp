@@ -1,0 +1,56 @@
+<view class="head">
+    <view class="user">
+        <image class="logo" src="{{userInfo.avatarUrl}}" mode="scaleToFill"></image>
+        <view>{{userInfo.nickName}}</view>
+    </view>
+    <view class="wallet">
+        <navigator url="/pages/create/create?index=0">
+            <view class="create">发红包</view>
+        </navigator>
+        <view class="money">{{wallet}}</view>
+    </view>
+    <view class="control">
+        <view id="control0" class="{{controlIndex==0?'chose':''}}" bindtap="controlClick">收的红包</view>
+        <view id="control1" class="{{controlIndex==1?'chose':''}}" bindtap="controlClick">发的红包</view>
+        <view id="control2" class="{{controlIndex==2?'chose':''}}" bindtap="controlClick">收支明细</view>
+        <view id="control3" class="{{controlIndex==3?'chose':''}}" bindtap="controlClick">我的留言</view>
+    </view>
+</view>
+
+
+
+<template name="item">
+    <view class="money-item">
+        <view class="money-{{item.money<0?'out':'in'}}">
+            <text wx:if="{{item.nowMoney}}">{{item.nowMoney/100}} / </text>
+            {{item.money/100}}
+        </view>
+        <view class="time">{{item.regTime}}</view>
+        <view wx:if="{{item.money>item.nowMoney}}" class="resend" id="id-{{item.rpId}}" bindtap="reSend">
+            发送
+        </view>
+        
+    </view>
+</template>
+
+<scroll-view style="display:{{controlIndex==0?'block':'none'}}">
+    <block wx:for="{{getList.objlist}}" wx:key="*">
+        <template is="item" data="{{item}}"/>
+    </block>
+</scroll-view>
+<scroll-view style="display:{{controlIndex==1?'block':'none'}}">
+    <block wx:for="{{createList.objlist}}" wx:key="*">
+        <template is="item" data="{{item}}"/>
+    </block>
+</scroll-view>
+<scroll-view style="display:{{controlIndex==2?'block':'none'}}">
+    <block wx:for="{{hisList.objlist}}" wx:key="*">
+        <template is="item" data="{{item}}"/>
+    </block>
+</scroll-view>
+<scroll-view style="display:{{controlIndex==3?'block':'none'}}">
+    <view class="message-item" wx:for="{{msglist.objlist}}" wx:key="*">
+        <view class="message">{{item.message}}</view>
+        <view class="time">{{item.regTime}}</view>
+    </view>
+</scroll-view>

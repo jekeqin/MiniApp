@@ -1,0 +1,29 @@
+/* pages/normal/normal.wxss */
+
+.form view{
+    margin: 20rpx 0rpx 20rpx 60rpx;
+    text-align: left;
+    font-size: 14px;
+    color: #ffffff;
+}
+.form .money{
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+}
+.form view input,.form view picker{
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 440rpx;
+    height: 80rpx;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 20rpx;
+    text-align: center;
+    padding: 0rpx;
+    color: #000000;
+}
+.submit{
+    margin: 100rpx 60rpx 0rpx 60rpx;
+    background-color: #CE0000;
+    color:#ffffff;
+}

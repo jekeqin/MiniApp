@@ -1,0 +1,20 @@
+<include src="../templete/background.wxml"/>
+<include src="../templete/pop.wxml"/>
+
+<view class="time">
+{{time}}
+</view>
+
+<view class="score">
+    <view>得分</view>
+    <text>{{score}}</text>
+</view>
+
+<button class="start" bindtap="start" hover-class="hover"
+ style="display:{{score<=0&&!start?'block':'none'}}">
+开始
+</button>
+
+<view style="display:{{start?'block':'none'}}">
+    <image class="shake" src="../../source/image/shake1.png"></image>
+</view>

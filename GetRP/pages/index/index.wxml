@@ -1,0 +1,82 @@
+<!--pages/index/index.wxml-->
+
+<include src="../templete/background.wxml"/>
+<include src="../templete/pop.wxml"/>
+<!--
+<scroll-view class="rpBox" scroll-x="true">
+    <view class="rp-item" wx:for="{{rplist}}" wx:key="*" bindtap="getRp" id="rp{{item.rpId}}">
+        <image src="../../source/image/header.jpg"></image>
+    </view>
+</scroll-view>
+-->
+
+<view class="online">{{userCount}}</view>
+
+<scroll-view class="messageBox" style="height:{{msgBoxHeight}}" scroll-into-view="{{intoViewId}}" bindscroll="scroll" scroll-y="true" >
+    <view class="msg-item-{{userId==item.userId?'right':'left'}}" wx:for="{{msglist}}" wx:key="*">
+        <image class="logo" src="{{item.logo}}"/>
+        <view class="message-rp" bindtap="getRp" id="rp{{item.rpId}}" wx:if="{{item.rpId}}">
+            <image src="../../source/icon/rp.png"></image>
+        </view>
+        <view class="message" id="msg{{item.msgId}}" bindtap="msgTap" wx:else>
+            <view>{{item.regTime}}</view>
+            <text>{{item.message}}</text>
+        </view>
+    </view>
+    <!--
+    <view class="msg-item">
+        <image class="logo" src="../../source/image/header.jpg"/>
+        <view class="message">
+            <view>2016-12-06 15:16:08</view>
+            <text>消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容</text>
+        </view>
+    </view>
+    -->
+</scroll-view>
+
+<view class="footer">
+    <view class="controlBox">
+        <view class="menu" bindtap="menuTap">
+            <image src="../../source/icon/add_b.png"></image>
+        </view>
+        <input class="messageInput" bindblur="input" maxlength="100" value="{{message}}"/>
+        <view class="send" bindtap="send">
+            <image src="../../source/icon/send_b.png"></image>
+        </view>
+    </view>
+    <view class="buttons" style="height:{{boxHeight}}">
+        <view class="box">
+            <navigator url="/pages/create/create?index=0" bindtap="hideBox">
+                <view>
+                    <image src="../../source/icon/equal.png"></image>
+                    <view class="name">普通红包</view>
+                </view>
+            </navigator>
+            <navigator url="/pages/create/create?index=1" bindtap="hideBox">
+                <view>
+                    <image src="../../source/icon/luck.png"></image>
+                    <view class="name">拼手气</view>
+                </view>
+            </navigator>
+            <navigator url="/pages/create/create?index=2" bindtap="hideBox">
+                <view>
+                    <image src="../../source/icon/shake.png"></image>
+                    <view class="name">摇一摇</view>
+                </view>
+            </navigator>
+            <navigator url="/pages/create/create?index=3" bindtap="hideBox">
+                <view>
+                    <image src="../../source/icon/click.png"></image>
+                    <view class="name">拼手速</view>
+                </view>
+            </navigator>
+            <navigator url="/pages/user/user" bindtap="hideBox">
+                <view>
+                    <image src="../../source/icon/user.png"></image>
+                    <view class="name">我的</view>
+                </view>
+            </navigator>
+        </view>
+    </view>
+</view>
+

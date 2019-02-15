@@ -1,0 +1,22 @@
+<include src="../templete/background.wxml"/>
+<include src="../templete/pop.wxml"/>
+
+<view class="time">
+{{time}}
+</view>
+
+<view class="score">
+    <view class="head">得分</view>
+    <text>{{score}}</text>
+    <view class="per" style="background:-webkit-linear-gradient(bottom,#ff0000 {{scale}}%,#ffffff {{scale+1}}%,rgba(0,0,0,0) {{scale+1}}%);"></view>
+</view>
+
+<button class="start" bindtap="start" hover-class="hover"
+ style="display:{{score<=0&&!start?'block':'none'}}">
+开始
+</button>
+
+<button class="click" bindtap="click" hover-class="hover"
+ style="display:{{start?'block':'none'}}">
+    点击
+</button>

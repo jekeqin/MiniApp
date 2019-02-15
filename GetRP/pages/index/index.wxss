@@ -1,0 +1,173 @@
+
+@import "../templete/pop.wxss";
+
+.online{
+    position: fixed;
+    width: 250rpx;
+    top: -1rpx;
+    left: 250rpx;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 20px;
+    border-radius: 0px 0px 20px 20px;
+}
+
+.rpBox{
+    height: 50px;
+    position: fixed;
+    top: -1rpx;
+    width:100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+    border: none;
+}
+.rp-item{
+    display: inline-block;
+}
+.rp-item image{
+    width:40px;
+    height:40px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.messageBox{
+    width: 100%;
+}
+
+.footer{
+    background-color: #f0f0f0;
+    width: 100%;
+    border-top: 1rpx solid #e0e0e0;
+    position: fixed;
+    bottom: 0rpx;
+}
+.footer .controlBox{
+    height: 100rpx;
+}
+.footer .controlBox .menu{
+    width: 100rpx;
+    height: 100rpx;
+    float: left;
+    text-align: center;
+}
+.footer .controlBox .menu image{
+    width: 60rpx;
+    height: 60rpx;
+    margin-top: 20rpx;
+}
+.footer .controlBox .messageInput{
+    width:526rpx;
+    height: 76rpx;
+    padding: 0rpx 10rpx;
+    float: left;
+    margin-top: 10rpx;
+    border: 1rpx solid #e0e0e0;
+    background-color: #ffffff;
+}
+.footer .controlBox .send{
+    width: 100rpx;
+    height: 100rpx;
+    text-align: center;
+    float: left;
+}
+.footer .controlBox .send image{
+    width: 60rpx;
+    height: 60rpx;
+    margin-top: 20rpx;
+}
+
+.footer .buttons .box{
+    padding: 25rpx 0rpx;
+    width: 100%;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: row;
+}
+.footer .buttons .box view{
+    width: 150rpx;
+    text-align: center;
+}
+.footer .buttons .box view image{
+    width: 120rpx;
+    height: 120rpx;
+    border: 1px solid #999999;
+    border-radius: 20rpx;
+}
+.footer .buttons .box view .name{
+    font-size: 12px;
+    color: #666666;
+}
+
+
+.msg-item-left{
+    clear: both;
+    padding: 20rpx;
+}
+.msg-item-left .logo{
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    border: 1rpx solid #ffffff;
+    float: left;
+}
+.msg-item-left .message{
+    margin-left: 10rpx;
+    max-width: 500rpx;
+    background-color: #ffffff;
+    padding: 10rpx;
+    float: left;
+    border-radius: 0rpx 10rpx 10rpx 10rpx;
+}
+.msg-item-left .message-rp{
+    margin-left: 10rpx;
+    max-width: 500rpx;
+    float: left;
+}
+
+.msg-item-right{
+    clear: both;
+    padding: 20rpx;
+}
+.msg-item-right .logo{
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    border: 1rpx solid #ffffff;
+    float: right;
+}
+.msg-item-right .message{
+    margin-right: 10rpx;
+    max-width: 500rpx;
+    background-color: #a0e75a;
+    padding: 10rpx;
+    float: right;
+    border-radius: 10rpx 0rpx 10rpx 10rpx;
+    border:1rpx solid #79FF79;
+}
+.msg-item-right .message-rp{
+    margin-right: 10rpx;
+    max-width: 500rpx;
+    float: right;
+}
+
+.message view{
+    font-size: 13px;
+    color: #666666;
+}
+.message text{
+    font-size: 14px;
+    word-break: break-all;
+}
+.message-rp image{
+    width: 110rpx;
+    height: 120rpx;
+    border-radius: 20rpx;
+    border: 5rpx solid #ffffff;
+}
+
+
+

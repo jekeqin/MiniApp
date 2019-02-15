@@ -1,0 +1,39 @@
+<form bindsubmit="submit">
+<view class="form">
+    <view>
+        账户余额
+        <view class="money">{{wallet}}</view>
+    </view>
+    <view>
+        红包总额
+        <input name="money" type="digit" maxlength="7" placeholder="0.01-5000"/>
+    </view>
+    <view style="display:{{visibility!='hidden'?'none':'block'}}">
+        红包个数
+        <input name="number" type="number" maxlength="4" placeholder="1-1000"/>
+    </view>
+    <view>
+        开始时间
+        <picker mode="time" value="{{time}}" start="{{now}}" end="23:59" bindchange="timeChange">
+            <view>{{time}}</view>
+        </picker>
+    </view>
+    <view>
+        红包类型
+        <picker mode="selector" value="{{index}}" range="{{types}}" bindchange="typeChange">
+            <view>{{types[index]}}</view>
+        </picker>
+    </view>
+    <view style="visibility:{{visibility}}">
+        游戏时长
+        <input name="sec" type="number" maxlength="2" placeholder="1-60，单位：秒"/>
+    </view>
+    <view style="visibility:{{visibility}}">
+        金额基数
+        <input name="per" type="digit" maxlength="5" placeholder="最低 0.01，单位：元"/>
+    </view>
+</view>
+<view>
+    <button class="submit" form-type="submit">提交</button>
+</view>
+</form>

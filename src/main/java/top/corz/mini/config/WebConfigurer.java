@@ -2,6 +2,7 @@ package top.corz.mini.config;
 
 import java.io.File;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,10 @@ import top.corz.mini.plugins.FileCache;
 @Configuration
 public class WebConfigurer implements WebMvcConfigurer {
 	
-	private static final String[] extFolder = {"html", "files"};
+	private static final String[] extFolder = {"files"};
+	
+	@Value("${html.root}")
+	private String htmlRoot;
 	
 	@Override
 	public void configurePathMatch(PathMatchConfigurer configurer) {
@@ -48,7 +52,11 @@ public class WebConfigurer implements WebMvcConfigurer {
 			}
 			log.info(folder);
 		}
-		registry.addResourceHandler("/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + File.separator + "static" + File.separator);
+		
+		if( htmlRoot!=null && htmlRoot.trim().length()>0 && !htmlRoot.equalsIgnoreCase("static") )
+			registry.addResourceHandler("/**").addResourceLocations("file:" + FileCache.staticFolder(htmlRoot.trim()));
+		else
+			registry.addResourceHandler("/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + File.separator + "static" + File.separator);
 
 		WebMvcConfigurer.super.addResourceHandlers(registry);
 	}

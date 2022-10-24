@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+<title>CORZ</title>
+<script type="text/javascript" src="./assets/xhr.js"></script>
+<style type="text/css">
+html,body{
+    padding:0px; margin: 0px; width: 100vw; height: 100vh; overflow: hidden;
+}
+div{
+    border-radius:50%;
+    text-align: center;
+    font-size: 14px;
+    color: #00b864;
+    position: fixed;
+}
+#loading{
+    top: 30vh;
+    left: calc(50vw - 55px);
+    width:110px;
+    height:110px;
+    background: conic-gradient(#fff, #00b864);
+    animation:fadenum 2.5s linear infinite;
+}
+#msg{
+    top: calc(30vh + 5px);
+    left: calc(50vw - 50px);
+    width: 100px;
+    line-height: 100px;
+    background-color: #fff;
+}
+@keyframes fadenum{
+    from{}
+    to{ transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+    <div id="loading" class="loading"></div>
+    <div id="msg" class="msg">正在前往...</div>
+    
+</body>
+<script type="text/javascript">
+ajax('/api/weixin/mini/url/random.json', "", (json)=>{
+	console.log(json);
+	if( json.code==200 ){
+		window.location.href = json.data;
+	}else{
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('msg').innerHTML = json.msg;
+        document.getElementById('msg').style.color = '#999';
+	}
+});
+</script>
+</html>

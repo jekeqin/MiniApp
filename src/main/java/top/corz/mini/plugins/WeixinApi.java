@@ -1,5 +1,6 @@
 package top.corz.mini.plugins;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import top.corz.mini.entity.MpException;
@@ -47,7 +48,10 @@ public class WeixinApi {
 				data.put("jump_wxa", wxa);
 			}
 			
-			return http.httpPost(url, data.toJSONString());
+			JSONObject json = http.httpPost(url, data.toJSONString());
+			if( json==null || json.getIntValue("errcode")!=0 )
+				throw new MpException(accessToken, json);
+			return json;
 		}
 		
 	}
@@ -62,7 +66,7 @@ public class WeixinApi {
 		 * @param sceneId			场景值ID，临时二维码时为32位非0整型，永久二维码时最大值为100000（目前参数只支持1--100000）
 		 * @return
 		 */
-		public final JSONObject createQrcode(String accessToken, JSONObject data)
+		public static final JSONObject createQrcode(String accessToken, JSONObject data)
 		{
 			JSONObject json = http.httpPost("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + accessToken , data.toJSONString());
 			if( json.containsKey("ticket") )
@@ -71,25 +75,50 @@ public class WeixinApi {
 			return null;
 		}
 		
-		public JSONObject articleQuery(String accessToken, Integer offset, Integer count, Integer no_content) {
+		public static JSONObject articleQuery(String accessToken, Integer offset, Integer count, Integer no_content) {
 			String url = "https://api.weixin.qq.com/cgi-bin/freepublish/batchget?access_token=" + accessToken;
 			JSONObject data = new JSONObject().fluentPut("offset", offset).fluentPut("count", count).fluentPut("no_content", no_content!=null?no_content:1);
 			return http.httpPost(url, data.toJSONString());
 		}
+		
+		public static JSONArray articleArrayQuery(String appid, String accessToken, Integer offset, Integer count, Integer no_content) {
+			JSONObject json = articleQuery(accessToken, offset, count, no_content);
+			System.out.println(json);
+			if( json==null ) {
+				FileCache.del("mp.article." + appid + "." + offset);
+				return null;
+			}
+			if( !json.containsKey("item") ) {
+				FileCache.del("mp.article." + appid + "." + offset);
+				return null;
+			}
+			
+			JSONArray items = new JSONArray();
+			JSONArray array = json.getJSONArray("item");
+			array.forEach(ai->{
+				JSONArray nis = ((JSONObject)ai).getJSONObject("content").getJSONArray("news_item");
+				items.addAll(nis);
+			});
+			if( items!=null && items.size()>0 ) {
+				FileCache.set("mp.article." + appid + "." + offset, items.toJSONString());
+			}
+			
+			return items;
+		}
 	}
 
 	public static final String AccessToken(String appid, String secret) {
-		String token = FileCache.get("wx.token." + appid, 7100000);
+		String token = FileCache.get("mp.token." + appid, 7100000);
 		if( token!=null )
 			return token;
 		
 		String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" +appid+ "&secret=" + secret;
 		JSONObject json = http.httpGet(url);
 		if( json!=null && json.containsKey("access_token") ) {
-			token = json.getString("token");
-			FileCache.set("wx.token." + appid, token);
+			token = json.getString("access_token");
+			FileCache.set("mp.token." + appid, token);
 		}else {
-			throw new MpException(json);
+			throw new MpException(appid, json);
 		}
 		return token;
 	}

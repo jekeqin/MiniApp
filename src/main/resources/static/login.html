@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+<title>CORZ</title>
+<link rel="stylesheet" href="./assets/html.css"/>
+<script type="text/javascript" src="./assets/xhr.js"></script>
+<script type="text/javascript" src="./assets/vue.3.2.41.js"></script>
+</head>
+<body>
+<div id="app">
+
+        <div class="login">
+        	<div class="fhead">营销管理</div>
+            <div>
+                <div>账号</div>
+                <input v-model="form.username" type="text" maxlength="20" placeholder="请输入登录账号"/>
+            </div>
+            <div>
+                <div>密码</div>
+                <input v-model="form.password" type="text" maxlength="20" placeholder="请输入登录密码"/>
+            </div>
+            <div>
+                <div></div>
+                <button class="submit" @click="submit">登录</button>
+            </div>
+        </div>
+
+</div>
+</body>
+<script type="text/javascript">
+const { createApp } = Vue;
+const app = createApp({
+	data() {
+		return {
+            form:{
+                username:'',
+                password:''
+            }
+		}
+	},
+	methods:{
+		submit(){
+            ajax('/api/user/login.json', this.form, (json)=>{
+                console.log(json);
+                if( json.code==200 ){
+                	sessionStorage.setItem('user.cookie', JSON.stringify(json.data));
+                	window.location.href = './index.html';
+                }else{
+                	window.alert(json.msg);
+                }
+            });
+        }
+	},
+	mounted(){
+		if( sessionStorage.getItem('user.cookie') ){
+			window.location.href = './index.html';
+		}
+	}
+}).mount('#app');
+</script>
+</html>

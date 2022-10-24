@@ -1,16 +1,16 @@
 package top.corz.mini.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 import top.corz.mini.utils.EncryUtil;
+import top.corz.mini.utils.VerifyUtils.VerifyMeta;
 
 @Data
 public class TopUser {
 
+	@VerifyMeta(msg = "请输入登录账号")
 	private String username;
 	
-	@JsonIgnore
+	@VerifyMeta(msg = "请输入登录密码")
 	private String password;
 	
 	private String nickname;

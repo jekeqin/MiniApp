@@ -5,9 +5,8 @@
 <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
 <title>CORZ</title>
 <link rel="stylesheet" href="./assets/html.css"/>
-<!-- <script type="text/javascript" src="./assets/jquery-3.6.1.min.js"></script> -->
+<script type="text/javascript" src="./assets/xhr.js"></script>
 <script type="text/javascript" src="./assets/vue.3.2.41.js"></script>
-
 </head>
 <body>
 <div id="app">
@@ -16,8 +15,7 @@
 			<div>应用管理({{apps.length}}) [ <a href="javascript:void(0)" @click="formInit(true)">新增</a> ]</div>
 			<div class="user hor">
 				<span></span>
-				<span>账号</span>
-				<span>退出</span>
+				<span>{{user.nickname}}|{{user.username}}</span>
 			</div>
 		</div>
 	</div>
@@ -77,6 +75,10 @@
                 <input v-model="form.query" type="text" maxlength="1000" placeholder="小程序跳转参数"/>
             </div>
             <div>
+                <div>补充链接</div>
+                <input v-model="form.url" type="text" maxlength="100" placeholder="http:// 或 https://"/>
+            </div>
+            <div>
                 <div>备注</div>
                 <input v-model="form.remark" type="text" maxlength="100" placeholder="备注信息"/>
             </div>
@@ -98,49 +100,16 @@ const init = {
                 path:'',
                 query:'',
                 remark:'',
+                mpid:'',
+                url:'',
                 type:'mini',
+                update:0,
                 state: 1
             }
-function ajax(url, data, callback, method){
-    console.log(url);
-    // https://www.jianshu.com/p/536aea258b7f
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = ()=>{
-        if(xhr.readyState==4){
-            console.log(xhr);
-            if((xhr.status >=200 && xhr.status < 300) || xhr.status ==304){
-                var data = xhr.responseText;
-                try{
-                    callback && callback(JSON.parse(data));
-                }catch(e){
-                    callback && callback(data);
-                }
-            }else{
-                console.log('error:'+ xhr.status)
-            }
-        }
-    }
-    xhr.upload.onprogress = (e)=>{
-        if (e.lengthComputable) {
-            console.log('onprogress', (e.loaded / e.total) * 100 );
-        }
-    }
-    //xhr.timeout = 3000;
-    //xhr.withCredentials = false;
-    if( method && method=='get' ){
-        xhr.open('GET',url + '?' + data);
-    }else{
-        xhr.open('POST',url, true);
-        xhr.setRequestHeader("Content-Type","application/json");
-    }
-    if( data && typeof data === 'object' )
-        xhr.send( JSON.stringify(data) );
-    else
-        xhr.send(data);
-}
 const app = createApp({
 	data() {
 		return {
+			user:{},
 			apps:[],
             dialog: false,
             form:{
@@ -160,8 +129,12 @@ const app = createApp({
         add(){
             ajax('/api/app/add.do', this.form, (json)=>{
                 console.log(json);
-                this.formInit(false);
-                this.query();
+                if( json.code==200 ){
+	                this.formInit(false);
+	                this.query();
+                }else{
+                	window.alert(json.msg);
+                }
             });
         },
         edit(item){
@@ -188,6 +161,16 @@ const app = createApp({
 	},
 	mounted(){
 		this.query();
+        try{
+		    let json = sessionStorage.getItem('user.cookie');
+            if( json ){
+                this.user = JSON.parse(json);
+            }
+        }catch(e){
+            console.error(e);
+            sessionStorage.removeItem('user.cookie');
+            window.location.href = './login.html';
+        }
 	}
 }).mount('#app');
 </script>

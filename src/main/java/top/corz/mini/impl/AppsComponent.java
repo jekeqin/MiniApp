@@ -12,6 +12,7 @@ import top.corz.mini.entity.JsonResult;
 import top.corz.mini.entity.TopApp;
 import top.corz.mini.plugins.FileCache;
 import top.corz.mini.utils.ValueUtils;
+import top.corz.mini.utils.VerifyUtils;
 
 @Component
 public class AppsComponent {
@@ -22,6 +23,10 @@ public class AppsComponent {
 	}
 
 	public synchronized JsonResult addApp(TopApp obj) {
+		String err = VerifyUtils.verify(obj);
+		if( err!=null )
+			return JsonResult.Err(err);
+			
 		obj.setUpdate(System.currentTimeMillis());
 		FileCache.mapAdd("apps", obj.getAppid(), obj, TopApp.class);
 		return manage();
@@ -48,16 +53,26 @@ public class AppsComponent {
 		return JsonResult.Ok(listApp());
 	}
 	
+	public synchronized TopApp findApp(String appid) {
+		LinkedHashMap<String, TopApp> map = FileCache.mapGet("apps", TopApp.class);
+		if( map!=null )
+			return map.get(appid);
+		return null;
+	}
 	
-	public synchronized TopApp firstApp(String type) {
-		List<TopApp> list = listApp().stream().filter(o-> o.getType().equalsIgnoreCase(type) && o.getState()==1).toList();
+	public synchronized TopApp firstApp(String type, String tag) {
+		List<TopApp> list = listApp().stream().filter(o-> 
+			o.getType().equalsIgnoreCase(type) && o.getState()==1 && o.tagCompare(tag)
+		).toList();
 		if( list.size()>0 )
 			return list.get(0);
 		return null;
 	}
 	
-	public synchronized TopApp randomApp(String type) {
-		List<TopApp> list = listApp().stream().filter(o-> o.getType().equalsIgnoreCase(type) && o.getState()==1).toList();
+	public synchronized TopApp randomApp(String type, String tag) {
+		List<TopApp> list = listApp().stream().filter(o-> 
+			o.getType().equalsIgnoreCase(type) && o.getState()==1 && o.tagCompare(tag)
+		).toList();
 		if( list.size()>0 )
 			return list.get(ValueUtils.random(list.size()));
 		return null;

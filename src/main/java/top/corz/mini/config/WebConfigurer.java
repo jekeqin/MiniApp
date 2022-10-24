@@ -46,7 +46,7 @@ public class WebConfigurer implements WebMvcConfigurer {
 			if(folder!=null) {
 				registry.addResourceHandler("/"+f+"/**").addResourceLocations("file:" + folder);
 			}
-			log.info(folder);	
+			log.info(folder);
 		}
 		registry.addResourceHandler("/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + File.separator + "static" + File.separator);
 

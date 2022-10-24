@@ -16,18 +16,19 @@ import java.util.stream.Collectors;
 
 import org.springframework.util.ResourceUtils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import top.corz.mini.utils.TimeUtils;
 
 public class FileCache {
 	
-	public static final String get(String name) {
-		return get(name, -1);
+	public static final <T> T getObj(String name, Class<T> cla) {
+		return getObj(name, cla, -1);
 	}
 	
-	public static final <T> T getObj(String name, Class<T> cla) {
-		String json = get(name, -1);
+	public static final <T> T getObj(String name, Class<T> cla, long expire) {
+		String json = get(name, expire);
 		if( json==null )
 			return null;
 		try {
@@ -37,7 +38,22 @@ public class FileCache {
 		}
 		return null;
 	}
-
+	
+	public static final JSONArray getJArray(String name, long expire) {
+		String json = get(name, expire);
+		if( json==null )
+			return null;
+		try {
+			return JSONArray.parseArray(json);
+		}catch (Exception e) {
+		}
+		return null;
+	}
+	
+	public static final String get(String name) {
+		return get(name, -1);
+	}
+	
 	public static final String get(String name, long expire) {
 		File file = new File(staticFolder("cache") + name + ".cache");
 		if( !file.exists() )
@@ -88,7 +104,10 @@ public class FileCache {
 	//======================================
 	
 	public static final <T> List<T> listGet(String name, Class<T> cla){
-		String str = FileCache.get(name);
+		return listGet(name, cla, -1);
+	}
+	public static final <T> List<T> listGet(String name, Class<T> cla, long expire){
+		String str = FileCache.get(name, expire);
 		if( str==null || str.length()==0 )
 			return new ArrayList<T>();
 		try {
@@ -99,13 +118,13 @@ public class FileCache {
 	}
 	
 	public static final <T> void listAdd(String name, T obj, Class<T> cla) {
-		List<T> list = listGet(name, cla);
+		List<T> list = listGet(name, cla, -1);
 		list.add(0, obj);
 		FileCache.set(name, JSONObject.toJSON(list));
 	}
 	
 	public static final List<JSONObject> listDel(String name, int index) {
-		List<JSONObject> list = listGet(name, JSONObject.class);
+		List<JSONObject> list = listGet(name, JSONObject.class, -1);
 		if( list.size()<=index )
 			return list;
 		
@@ -124,7 +143,13 @@ public class FileCache {
 		if( str==null || str.length()==0 )
 			return map;
 		try {
-			map = JSONObject.parseObject(str, map.getClass());
+			LinkedHashMap<String, JSONObject> cache = new LinkedHashMap<String, JSONObject>();
+			cache = JSONObject.parseObject(str, cache.getClass());
+			if( cache!=null ) {
+				for(String key : cache.keySet()) {
+					map.put(key, cache.get(key).toJavaObject(cla));
+				}
+			}
 			return map;
 		}catch (Exception e) {
 		}

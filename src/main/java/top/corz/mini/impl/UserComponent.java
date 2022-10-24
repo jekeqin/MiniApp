@@ -14,7 +14,7 @@ import top.corz.mini.utils.VerifyUtils;
 public class UserComponent {
 
 	public JsonResult login(TopUser user) {
-		String err = VerifyUtils.verify(user, "username", "password");
+		String err = VerifyUtils.verify(user);
 		if(err!=null)
 			return JsonResult.Err(err);
 		
@@ -27,6 +27,7 @@ public class UserComponent {
 		has.setToken(has.newToken());
 		FileCache.set("user." + user.getUsername().toLowerCase(), JSONObject.toJSON(has));
 		
+		has.setPassword(null);
 		return JsonResult.Ok(has);
 	}
 	

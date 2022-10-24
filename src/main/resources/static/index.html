@@ -124,6 +124,8 @@ const app = createApp({
                 console.log(json);
                 if( json.code==200 )
                     this.apps = json.data;
+                else if( json.code==403 )
+                	this.logout();
             });
         },
         add(){
@@ -157,6 +159,10 @@ const app = createApp({
                     this.query();
                 }, 'get'); 
             }
+        },
+        logout(){
+        	sessionStorage.removeItem('user.cookie');
+            window.location.href = './login.html';
         }
 	},
 	mounted(){
@@ -168,8 +174,7 @@ const app = createApp({
             }
         }catch(e){
             console.error(e);
-            sessionStorage.removeItem('user.cookie');
-            window.location.href = './login.html';
+            this.logout();
         }
 	}
 }).mount('#app');

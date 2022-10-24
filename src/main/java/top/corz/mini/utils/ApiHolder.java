@@ -1,7 +1,9 @@
 package top.corz.mini.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import top.corz.mini.entity.TopUser;
 
+@Slf4j
 public class ApiHolder {
 
 	private static final ThreadLocal<TopUser> _user = new ThreadLocal<>();
@@ -20,7 +22,7 @@ public class ApiHolder {
 			return;
 
 		String[] array = token.split("\\|");
-		System.out.println(token);
+		log.debug(token);
 		_token.set(array);
 	}
 	

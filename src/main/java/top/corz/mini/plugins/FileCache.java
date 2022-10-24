@@ -19,8 +19,10 @@ import org.springframework.util.ResourceUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import lombok.extern.slf4j.Slf4j;
 import top.corz.mini.utils.TimeUtils;
 
+@Slf4j
 public class FileCache {
 	
 	public static final <T> T getObj(String name, Class<T> cla) {
@@ -123,15 +125,17 @@ public class FileCache {
 		FileCache.set(name, JSONObject.toJSON(list));
 	}
 	
-	public static final List<JSONObject> listDel(String name, int index) {
+	public static final JSONObject listDel(String name, int index) {
 		List<JSONObject> list = listGet(name, JSONObject.class, -1);
 		if( list.size()<=index )
-			return list;
+			return null;
 		
+		JSONObject obj = list.get(index);
+		log.info("cache.list.del: {}:{}", index, obj);
 		list.remove(index);
 		FileCache.set(name, JSONObject.toJSON(list));
 		
-		return list;
+		return obj;
 	}
 	
 	//======================================
@@ -170,6 +174,7 @@ public class FileCache {
 			obj = map.get(key);
 			map.remove(key);
 		}
+		log.info("cache.map.del: {}:{}", key, obj);
 		FileCache.set(name, JSONObject.toJSON(map));
 		return obj;
 	}
@@ -209,7 +214,7 @@ public class FileCache {
 	
 	private static final void fileDeleteFromDisk(String folder, String name) {
 		try {
-			System.out.println("del: " + Paths.get(folder + name) );
+			log.info("cache.del: {}", Paths.get(folder + name));
 			Files.deleteIfExists(Paths.get(folder + name));
 		}catch (Exception e) {
 			e.printStackTrace();

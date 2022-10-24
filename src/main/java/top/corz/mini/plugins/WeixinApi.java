@@ -3,8 +3,10 @@ package top.corz.mini.plugins;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import lombok.extern.slf4j.Slf4j;
 import top.corz.mini.entity.MpException;
 
+@Slf4j
 public class WeixinApi {
 
 	private static HttpApi http = new HttpApi();
@@ -83,7 +85,7 @@ public class WeixinApi {
 		
 		public static JSONArray articleArrayQuery(String appid, String accessToken, Integer offset, Integer count, Integer no_content) {
 			JSONObject json = articleQuery(accessToken, offset, count, no_content);
-			System.out.println(json);
+			log.info("article: {}", json);
 			if( json==null ) {
 				FileCache.del("mp.article." + appid + "." + offset);
 				return null;

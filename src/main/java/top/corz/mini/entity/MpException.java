@@ -2,6 +2,9 @@ package top.corz.mini.entity;
 
 import com.alibaba.fastjson.JSONObject;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class MpException extends RuntimeException {
 
 	private static final long serialVersionUID = -5592624043067470403L;
@@ -21,7 +24,7 @@ public class MpException extends RuntimeException {
 	
 	@Override
 	public String toString() {
-		System.out.println(appid + "|" + this.ext.toJSONString());
+		log.error("app/token: {}, err: {}", appid, this.ext.toJSONString());
 		if( this.ext!=null )
 			return this.ext.toJSONString();
 		return super.toString();

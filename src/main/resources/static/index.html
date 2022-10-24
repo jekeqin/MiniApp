@@ -29,7 +29,7 @@
                     <div>[ <a href="javascript:void(0)" @click="form=Object.assign({},item);dialog=true">编辑</a> | <a href="javascript:void(0)" @click="del(item)">删除</a> ]</div>
                 </div>
                 <div>APPID：{{item.appid}}　|　SECRET：{{item.secret}}</div>
-                <div>PATH：{{item.path}}&nbsp;|&nbsp;QUERY：{{item.query}}</div>
+                <div>PATH：{{item.path}}　|　QUERY：{{item.query}}<span v-if="item.url">　|　链接：{{item.url}}</span></div>
                 <div><span v-if="item.mpid">MP.ID：{{item.mpid}}　|　</span>备注：{{item.remark}}<span v-if="item.note">　|　异常：{{item.note}}</span></div>
             </div>
         </div>

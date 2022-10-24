@@ -1,8 +1,0 @@
-
-<view animation="{{animation}}" class="pop" style="display:{{getMoney>0?'block':'none'}}"
-     bindtap="hidePop">
-    <image class="pop-back" src="../../source/image/pop.png"></image>
-    <view class="getMoney">
-        ￥{{getMoney}}
-    </view>
-</view>

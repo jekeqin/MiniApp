@@ -1,3 +1,0 @@
-<view style="width: 750rpx; height: 100%; position: fixed; top: -1rpx; z-index:-1">
-    <image style="width: 750rpx; height: 100%;" src="../../source/image/back.jpg" mode="aspectFill"/>
-</view>

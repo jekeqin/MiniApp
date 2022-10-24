@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+<title>CORZ</title>
+<link rel="stylesheet" href="./assets/html.css"/>
+<!-- <script type="text/javascript" src="./assets/jquery-3.6.1.min.js"></script> -->
+<script type="text/javascript" src="./assets/vue.3.2.41.js"></script>
+
+</head>
+<body>
+<div id="app">
+	<div class="banner hor">
+		<div class="head hor">
+			<div>应用管理({{apps.length}}) [ <a href="javascript:void(0)" @click="formInit(true)">新增</a> ]</div>
+			<div class="user hor">
+				<span></span>
+				<span>账号</span>
+				<span>退出</span>
+			</div>
+		</div>
+	</div>
+	<div class="main">
+        <div>
+            <div class="item" v-for="item in apps">
+                <div class="hor">
+                    <div class="tag" :class="item.type">{{item.type=='mini'?'小程序':'公众号'}}</div>
+                    <div class="name"><b>　{{item.name}}</b></div>
+                    <div class="tog" :class="item.state==1?'on':'of'" @click="edit(item)">{{item.state==1?'已开启':'已关闭'}}</div>
+                    <div>[ <a href="javascript:void(0)" @click="form=Object.assign({},item);dialog=true">编辑</a> | <a href="javascript:void(0)" @click="del(item)">删除</a> ]</div>
+                </div>
+                <div>APPID：{{item.appid}}　|　SECRET：{{item.secret}}</div>
+                <div>PATH：{{item.path}}&nbsp;|&nbsp;QUERY：{{item.query}}</div>
+                <div><span v-if="item.mpid">MP.ID：{{item.mpid}}　|　</span>备注：{{item.remark}}<span v-if="item.note">　|　异常：{{item.note}}</span></div>
+            </div>
+        </div>
+	</div>
+
+    <div class="mask hor" v-if="dialog">
+        <div class="form">
+            <div>
+                <div>类型</div>
+                <label>
+                    <input v-model="form.type" name="type" type="radio" value="mini"/>小程序
+                </label>
+                <label>
+                    <input v-model="form.type" name="type" type="radio" value="mp"/>公众号
+                </label>
+                <div class="toggle hor">
+                    <div class="tog" :class="form.state==1?'on':'of'" @click="form.state==1?form.state=0:form.state=1">O</div>
+                    {{form.state==1?'已开启':'已关闭'}}
+                </div>
+            </div>
+            <div>
+                <div class="star">名称</div>
+                <input v-model="form.name" type="text" maxlength="30" placeholder="请填写小程序或公众号 名称"/>
+            </div>
+            <div>
+                <div class="star">APPID</div>
+                <input v-model="form.appid" type="text" maxlength="32" placeholder="请填写小程序或公众号 AppID" :disabled="form.update&&true"/>
+            </div>
+            <div>
+                <div class="star">SECRET</div>
+                <input v-model="form.secret" type="text" maxlength="64" placeholder="请填写小程序或公众号 AppSecret"/>
+            </div>
+            <div>
+                <div>MP.ID</div>
+                <input v-model="form.mpid" type="text" maxlength="64" placeholder="小程序关联公众号的 AppID（选填）"/>
+            </div>
+            <div>
+                <div>PATH</div>
+                <input v-model="form.path" type="text" maxlength="128" placeholder="小程序跳转页面路径"/>
+            </div>
+            <div>
+                <div>QUERY</div>
+                <input v-model="form.query" type="text" maxlength="1000" placeholder="小程序跳转参数"/>
+            </div>
+            <div>
+                <div>备注</div>
+                <input v-model="form.remark" type="text" maxlength="100" placeholder="备注信息"/>
+            </div>
+            <div>
+                <div></div>
+                <button class="submit" @click="add">保存</button>
+                <button class="close" @click="formInit(false)">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+const { createApp } = Vue;
+const init = {
+                name:'',
+                appid:'',
+                secret:'',
+                path:'',
+                query:'',
+                remark:'',
+                type:'mini',
+                state: 1
+            }
+function ajax(url, data, callback, method){
+    console.log(url);
+    // https://www.jianshu.com/p/536aea258b7f
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = ()=>{
+        if(xhr.readyState==4){
+            console.log(xhr);
+            if((xhr.status >=200 && xhr.status < 300) || xhr.status ==304){
+                var data = xhr.responseText;
+                try{
+                    callback && callback(JSON.parse(data));
+                }catch(e){
+                    callback && callback(data);
+                }
+            }else{
+                console.log('error:'+ xhr.status)
+            }
+        }
+    }
+    xhr.upload.onprogress = (e)=>{
+        if (e.lengthComputable) {
+            console.log('onprogress', (e.loaded / e.total) * 100 );
+        }
+    }
+    //xhr.timeout = 3000;
+    //xhr.withCredentials = false;
+    if( method && method=='get' ){
+        xhr.open('GET',url + '?' + data);
+    }else{
+        xhr.open('POST',url, true);
+        xhr.setRequestHeader("Content-Type","application/json");
+    }
+    if( data && typeof data === 'object' )
+        xhr.send( JSON.stringify(data) );
+    else
+        xhr.send(data);
+}
+const app = createApp({
+	data() {
+		return {
+			apps:[],
+            dialog: false,
+            form:{
+                type:'mini',
+                state: 1
+            }
+		}
+	},
+	methods:{
+		query(){
+            ajax('/api/app/list.do', {}, (json)=>{
+                console.log(json);
+                if( json.code==200 )
+                    this.apps = json.data;
+            });
+        },
+        add(){
+            ajax('/api/app/add.do', this.form, (json)=>{
+                console.log(json);
+                this.formInit(false);
+                this.query();
+            });
+        },
+        edit(item){
+            item.state = item.state==1? 0 : 1;
+            ajax('/api/app/add.do', item, (json)=>{
+                console.log(json);
+                this.query();
+            });
+        },
+        formInit(show){
+            for(let key in init){
+                this.form[key] = init[key];
+            }
+            this.dialog = show;
+        },
+        del(item){
+            if( window.confirm('删除 ' + item.name + ' ?') ){
+                ajax('/api/app/del.do', 'appid=' + item.appid, (json)=>{
+                    console.log(json);
+                    this.query();
+                }, 'get'); 
+            }
+        }
+	},
+	mounted(){
+		this.query();
+	}
+}).mount('#app');
+</script>
+</html>

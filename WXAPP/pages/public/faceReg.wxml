@@ -1,7 +1,0 @@
-<!--pages/public/faceReg.wxml-->
-
-<camera device-position='front' flash='off' bindstop='' binderror=''></camera>
-
-<view class="row-1"></view>
-<view class="circle"></view>
-<view class="row-2"></view>

@@ -1,0 +1,196 @@
+@charset "UTF-8";
+
+html,body{
+	padding: 0px;
+	margin: 0px;	
+}
+html *{
+	box-sizing: border-box;
+    outline:medium;
+    word-break: break-all;
+}
+body{
+	width: 100vw;
+	height:100vh;
+	background-color: #f9f9f9;
+    overflow: hidden;
+}
+input:disabled{
+    background-color: #f0f0f0 !important;
+}
+
+.hor{
+	display: flex;
+	align-items: center;
+    flex-wrap: wrap;
+}
+
+.banner{
+	width: 100vw;
+	height:50px;
+	background-color: #fff;
+	box-shadow: 0px 0px 2px #999;
+    margin-bottom: 10px;
+    justify-content: center;
+}
+.head{
+	width: 1000px;
+	justify-content: space-between;
+	font-size: 14px;
+}
+.head span+span{
+	margin-left:10px;
+}
+.star{
+    color:red !important;
+}
+.star::after{
+    content: '*';
+}
+
+.main{
+    margin: 0px auto;
+    height: calc(100vh - 70px);
+    background-color: #fff;
+    box-shadow: 0px 0px 2px #bbb;
+    padding: 5px 10px 10px;
+    width: calc(100vw - 20px);
+    max-width: 1000px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.item{
+    font-size: 13px;
+    line-height: 150%;
+    box-shadow: 0px 0px 2px #999;
+    padding: 5px 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.item>div{
+    padding: 5px 0px;
+}
+.item>div+div{
+    border-top: 1px solid #ccc;
+}
+.item .tag{
+    padding: 0px 5px;
+    line-height: 16px !important;
+    font-size: 12px;
+    color: #fff;
+    border-radius: 5px;
+}
+.item .tag.mini{
+    background-color: #00b864;
+}
+.item .tag.mp{
+    background-color: orange;
+}
+.item .name{
+    flex-grow: 1;
+}
+.item .tog{
+    font-size: 12px !important;
+    width: 50px !important;
+    text-align: center !important;
+    padding: 0px !important;
+    margin-left: 10px;
+}
+
+
+.mask{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 9;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    justify-content: center;
+}
+.form{
+    width: 520px;
+    height:480px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 1px #999;
+    padding: 20px;
+}
+.form>div{
+    padding: 10px 0px;
+    display: flex;
+    align-items: center;
+}
+.form>div+div{
+    border-top:1px solid #f0f0f0;
+}
+.form>div>div{
+    font-size: 13px;
+    color:#666;
+    width: 60px;
+    flex-shrink: 0;
+}
+.form label{
+    font-size: 14px;
+}
+.form label+label{
+    margin-left: 30px;
+}
+.form input[type=text]{
+    height: 30px;
+    border:none;
+    flex-grow: 1;
+    box-shadow: 0px 0px 2px inset #666;
+    border-radius: 15px;
+    padding: 0px 10px;
+}
+.form .toggle{
+    user-select: none;
+    flex-grow: 1;
+    justify-content: right;
+}
+
+.tog{
+    cursor: pointer;
+    width: 40px;
+    line-height: 19px !important;
+    height: 20px;
+    font-size: 18px;
+    color:#fff;
+    border-radius: 10px;
+    padding: 0px 4px;
+    margin-right: 10px;
+    box-shadow: 0px 0px 2px inset #999;
+}
+.tog.on{
+    background-color: #00b864;
+    text-align: right;
+}
+.tog.of{
+    background-color: red;
+}
+
+.form button{
+    width: 100px !important;
+    height: 30px !important;
+    border-radius: 15px;
+    color:#fff;
+    border: none !important;
+    box-shadow: 0px 0px 2px #666;
+}
+.form .submit{
+    background-color: #00b864;
+}
+.form .close{
+    margin-left: 20px;
+    background-color: #999;
+}
+
+
+@media screen and (max-width: 768px) {
+	.head{
+		width:100vw;
+		padding:0px 10px;
+		justify-content: space-between;
+	}
+}

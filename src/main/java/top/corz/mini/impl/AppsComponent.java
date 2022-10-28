@@ -54,6 +54,8 @@ public class AppsComponent {
 	}
 	
 	public synchronized TopApp findApp(String appid) {
+		if( appid==null || appid.length()==0 )
+			return null;
 		LinkedHashMap<String, TopApp> map = FileCache.mapGet("apps", TopApp.class);
 		if( map!=null )
 			return map.get(appid);

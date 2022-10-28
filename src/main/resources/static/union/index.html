@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+<title>CORZ</title>
+<link rel="stylesheet" href="../assets/union.css"/>
+<script type="text/javascript" src="../assets/xhr.js"></script>
+<script type="text/javascript" src="../assets/vue.3.2.41.js"></script>
+</head>
+<body>
+<div id="app">
+	
+	<div class="search hor">
+		<div class="keywords">
+			<input maxlength="30"/>
+			<div class="s">
+				<svg t="1666949747707" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2540" width="20" height="20"><path d="M966.4 924.8l-230.4-227.2c60.8-67.2 96-156.8 96-256 0-217.6-176-390.4-390.4-390.4-217.6 0-390.4 176-390.4 390.4 0 217.6 176 390.4 390.4 390.4 99.2 0 188.8-35.2 256-96l230.4 227.2c9.6 9.6 28.8 9.6 38.4 0C979.2 950.4 979.2 934.4 966.4 924.8zM102.4 441.6c0-185.6 150.4-339.2 339.2-339.2s339.2 150.4 339.2 339.2c0 89.6-35.2 172.8-92.8 233.6-3.2 0-3.2 3.2-6.4 3.2-3.2 3.2-3.2 3.2-3.2 6.4-60.8 57.6-144 92.8-233.6 92.8C256 780.8 102.4 627.2 102.4 441.6z" p-id="2541" fill="#8a8a8a"></path></svg>
+			</div>
+		</div>
+		<div @click="shade=!shade">
+			<svg t="1666950046533" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4499" width="22" height="22"><path d="M577.499296 1023.99875a99.999878 99.999878 0 0 1-47.999942-11.999985l-131.999839-72.999911a99.999878 99.999878 0 0 1-51.999936-87.999893V431.999473a19.999976 19.999976 0 0 0-7.99999-15.999981L32.499961 171.99979l-3.999995-3.999995C0.5 138.99983-6.499991 96.999882 9.499989 59.999927S60.499927 0 100.499878 0h821.998997c39.999951 0 75.999907 22.999972 91.999887 59.999927s8.999989 77.999905-17.999978 107.999868l-3.999995 3.999995-307.999624 246.999699a19.999976 19.999976 0 0 0-6.999991 15.99998v488.999403a99.999878 99.999878 0 0 1-99.999878 99.999878zM84.499897 111.999863l302.999631 241.999705a98.999879 98.999879 0 0 1 37.999953 77.999905v418.999488a19.999976 19.999976 0 0 0 9.999988 17.999978l131.999839 71.999912a19.999976 19.999976 0 0 0 29.999963-17.999978V434.999469a99.999878 99.999878 0 0 1 36.999955-77.999905l303.999629-244.999701a19.999976 19.999976 0 0 0-15.99998-31.999961H100.499878a19.999976 19.999976 0 0 0-15.999981 31.999961z m881.998924 28.999965z" fill="#8a8a8a" p-id="4500"></path><path d="M983.4988 520.999364H757.499076a39.999951 39.999951 0 0 1 0-79.999902h225.999724a39.999951 39.999951 0 0 1 0 79.999902zM983.4988 670.999181H757.499076a39.999951 39.999951 0 0 1 0-79.999902h225.999724a39.999951 39.999951 0 0 1 0 79.999902zM983.4988 819.998999H757.499076a39.999951 39.999951 0 0 1 0-79.999902h225.999724a39.999951 39.999951 0 0 1 0 79.999902z" fill="#8a8a8a" p-id="4501"></path></svg>
+		</div>
+	</div>
+		
+	<div class="main">
+		<div v-if="shade" class="shade">
+			<div class="form">
+				<div class="hor">
+					<div>商品分类：</div>
+				</div>
+				<div class="hor">
+					<div>价格范围：</div>
+					<input/> ~ <input/>
+				</div>
+				<div class="hor">
+					<div>收货方式：</div>
+					<div>
+						支持快递：
+						同城配送：
+						上门自提：
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="list">
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+const { createApp } = Vue;
+const app = createApp({
+	data() {
+		return {
+			shade: false,
+			where:{
+				
+			}
+		}
+	},
+	methods:{
+		query(){
+            ajax('/api/app/list.do', {}, (json)=>{
+                console.log(json);
+                if( json.code==200 )
+                    this.apps = json.data;
+                else if( json.code==403 )
+                	this.logout();
+            });
+        }
+	},
+	mounted(){
+		this.query();
+	}
+}).mount('#app');
+</script>
+</html>

@@ -22,6 +22,7 @@ public class WebInterceptor implements HandlerInterceptor {
 		if( token==null )
 			token = CookieUtils.getCookie(request, "token");
 		
+		ApiHolder.setAppid(request.getHeader("appid"));
 		ApiHolder.setToken(token);
 		
 		return HandlerInterceptor.super.preHandle(request, response, handler);

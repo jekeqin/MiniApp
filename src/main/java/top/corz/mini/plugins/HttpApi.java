@@ -3,7 +3,9 @@ package top.corz.mini.plugins;
 import java.io.InputStream;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.SSLContext;
@@ -48,6 +50,21 @@ public class HttpApi {
 		if( json==null )
 			return null;
 		return json.toJavaObject(z);
+	}
+	
+	public JSONObject httpGet(String url, JSONObject data) {
+		if( data!=null ) {
+			List<String> list = new ArrayList<>();
+			for(String key:data.keySet()) {
+				list.add(key + "=" + data.getString(key));
+			}
+			if( url.indexOf("?")>0 ) {
+				url += "&" + String.join("&", list);
+			}else {
+				url += "?" + String.join("&", list);
+			}
+		}
+		return httpGet(url);
 	}
 	
 	public JSONObject httpGet(String url) {

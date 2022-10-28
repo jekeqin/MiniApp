@@ -32,8 +32,7 @@ public class WeixinComponent {
 			return JsonResult.Err("暂无可用小程序");
 		
 		try {
-			String token = WeixinApi.AccessToken(app.getAppid(), app.getSecret());
-			JSONObject json = WeixinApi.Mini.urlCreate(mode, token, app.getPath(), app.getQuery(), null, null, null);
+			JSONObject json = WeixinApi.Mini.urlCreate(mode, app, app.getPath(), app.getQuery(), null, null, null);
 			if( json.containsKey("url_link") )
 				return JsonResult.Ok(json.getString("url_link"));
 			return JsonResult.Ok(json.getString("openlink"));
@@ -66,15 +65,13 @@ public class WeixinComponent {
 		if( app==null )
 			return JsonResult.Err("公众号未登记");
 		
-		JSONArray array = FileCache.getJArray("mp.article." + app.getAppid() + "." + offset, 3600000);
+		JSONArray array = FileCache.getJArray("mp.article." + app.getAppid() + "." + offset, 3600);
 		if( (array==null || array.size()==0) && offset==0 ) {
-			String token = WeixinApi.AccessToken(app.getAppid(), app.getSecret());
-			
-			array = WeixinApi.Mp.articleArrayQuery(app.getAppid(), token, 0, 20, 1);
+			array = WeixinApi.Mp.articleArrayQuery(app, 0, 20, 1);
 			if( array!=null && array.size()==20 ) {
 				executor.execute(()->{
 					for(int i=1;i<3;i++) {
-						JSONArray list = WeixinApi.Mp.articleArrayQuery(app.getAppid(), token, i * 20, 20, 1);
+						JSONArray list = WeixinApi.Mp.articleArrayQuery(app, i * 20, 20, 1);
 						if(list==null || list.size()<20)
 							return;
 					}

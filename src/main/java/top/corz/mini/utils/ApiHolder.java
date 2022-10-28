@@ -8,7 +8,8 @@ public class ApiHolder {
 
 	private static final ThreadLocal<TopUser> _user = new ThreadLocal<>();
 	private static final ThreadLocal<String[]> _token = new ThreadLocal<>();
-
+	private static final ThreadLocal<String> _appid = new ThreadLocal<>();
+	
 	public static final void setUser(TopUser obj) {
 		_user.set(obj);
 	}
@@ -30,8 +31,16 @@ public class ApiHolder {
 		return _token.get();
 	}
 	
+	public static final void setAppid(String appid) {
+		_appid.set(appid);
+	}
+	public static final String getAppid() {
+		return _appid.get();
+	}
+	
 	public static final void clear() {
 		_user.remove();
 		_token.remove();
+		_appid.remove();
 	}
 }

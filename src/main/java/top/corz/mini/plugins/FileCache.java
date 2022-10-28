@@ -60,7 +60,7 @@ public class FileCache {
 		File file = new File(staticFolder("cache") + name + ".cache");
 		if( !file.exists() )
 			return null;
-		if(expire > 0 && System.currentTimeMillis() > file.lastModified() + expire )
+		if(expire > 0 && System.currentTimeMillis() > file.lastModified() + expire * 1000)
 			return null;
 		try {
 			String value = Files.lines(file.toPath()).collect(Collectors.joining());

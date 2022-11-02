@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+
 import top.corz.mini.entity.MpRequest;
 import top.corz.mini.impl.WeixinComponent;
 
@@ -28,5 +30,10 @@ public class WeixinController {
 	@RequestMapping("/request.json")
 	public Object mpRequest(@RequestBody MpRequest obj) {
 		return weixin.weixinRequest(obj);
+	}
+	
+	@RequestMapping("/text/check.json")
+	public Object checkText(@RequestBody JSONObject json) {
+		return weixin.textCheck(json.getString("appid"), json.getString("code"), json.getString("openid"), json.getString("text"));
 	}
 }

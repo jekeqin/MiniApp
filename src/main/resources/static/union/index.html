@@ -5,16 +5,20 @@
 <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
 <title>CORZ</title>
 <link rel="stylesheet" href="../assets/union.css"/>
+<link rel="stylesheet" href="../assets/swiper/swiper-bundle.css"/>
 <script type="text/javascript" src="../assets/xhr.js"></script>
+<script type="text/javascript" src="../assets/swiper/swiper-bundle.min.js"></script>
 <script type="text/javascript" src="../assets/vue.3.2.41.js"></script>
+<script type="text/javascript" src="../assets/qrcode.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 </head>
 <body>
 <div id="app">
 	
 	<div class="search hor">
 		<div class="keywords">
-			<input maxlength="30"/>
-			<div class="s">
+			<input v-model="where.query" maxlength="30" @keyup.enter="query(true)"/>
+			<div class="s" @click="query(true)">
 				<svg t="1666949747707" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2540" width="20" height="20"><path d="M966.4 924.8l-230.4-227.2c60.8-67.2 96-156.8 96-256 0-217.6-176-390.4-390.4-390.4-217.6 0-390.4 176-390.4 390.4 0 217.6 176 390.4 390.4 390.4 99.2 0 188.8-35.2 256-96l230.4 227.2c9.6 9.6 28.8 9.6 38.4 0C979.2 950.4 979.2 934.4 966.4 924.8zM102.4 441.6c0-185.6 150.4-339.2 339.2-339.2s339.2 150.4 339.2 339.2c0 89.6-35.2 172.8-92.8 233.6-3.2 0-3.2 3.2-6.4 3.2-3.2 3.2-3.2 3.2-3.2 6.4-60.8 57.6-144 92.8-233.6 92.8C256 780.8 102.4 627.2 102.4 441.6z" p-id="2541" fill="#8a8a8a"></path></svg>
 			</div>
 		</div>
@@ -23,56 +27,206 @@
 		</div>
 	</div>
 		
-	<div class="main">
-		<div v-if="shade" class="shade">
+	<div class="main" :class="(shade||mask)?'hide':''">
+		<div v-if="shade" class="fixed shade">
 			<div class="form">
 				<div class="hor">
-					<div>商品分类：</div>
+					<div>分类：</div>
+					<div class="types">
+						<select v-model="where.categoryId">
+							<option v-for="item in category" :value="item.catId">{{item.name}}</option>
+						</select>
+					</div>
 				</div>
 				<div class="hor">
-					<div>价格范围：</div>
-					<input/> ~ <input/>
+					<div>价格：</div>
+					<div class="price"><input v-model="range.min" type="number"/>&nbsp;~&nbsp;<input v-model="range.max" type="number"/></div>
 				</div>
 				<div class="hor">
-					<div>收货方式：</div>
+					<div>配送：</div>
+					<div class="exp hor">
+						<label><input v-model="where.shippingMethods.express" type="checkbox" value="1"/><span>快递</span></label>
+						<label><input v-model="where.shippingMethods.pickup" type="checkbox" value="1"/><span>自提</span></label>	
+						<label><input v-model="where.shippingMethods.sameCity" type="checkbox" value="1"/><span>同城配送</span></label>
+					</div>
+				</div>
+				<div class="hor">
+					<div>排序：</div>
+					<div class="exp hor">
+						<label><input v-model="where.sortType" type="radio" value="0"/><span>默认排序</span></label>
+						<label><input v-model="where.sortType" type="radio" value="1"/><span>价格升序</span></label>
+						<label><input v-model="where.sortType" type="radio" value="2"/><span>价格降序</span></label>
+						<label><input v-model="where.sortType" type="radio" value="7"/><span>销量升序</span></label>
+						<label><input v-model="where.sortType" type="radio" value="8"/><span>销量降序</span></label>
+					</div>
+				</div>
+				<div class="hor">
+					<div>&nbsp;</div>
 					<div>
-						支持快递：
-						同城配送：
-						上门自提：
+						<button @click="query(true)">确定</button>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="list">
+            <div class="item" v-for="item in array" :key="item.productId" @click="toDetail(item)">
+                <img :src="item.product.info.headImg[0]"/>
+                <div class="info">
+                    <div class="name">{{item.product.info.title}}</div>
+                    <div class="price"><span>￥</span>{{item.product.info.minPrice}}</div>
+                </div>
+            </div>
 		</div>
 	</div>
+
+    <div v-if="network" class="loading">
+        <div><div></div></div>
+    </div>
+
+    <div v-if="mask" class="fixed mask" @click="maskClose">
+        <div class="alert">
+            <div class="swiper heads">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" v-for="item in detail?.headImg">
+                        <img :src="item"/>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <div class="info">
+                <div>
+                    <div>
+                        <div class="name">{{detail?.title}}</div>
+                        <!-- <div class="sub">{{detail?.subTitle}}</div> -->
+                        <div class="price"><span>￥</span>{{detail?.minPrice}}</div>
+                    </div>
+                    <div class="type">
+                        <span v-for="item in detail?.category">{{item.name}}&nbsp;/&nbsp;</span>
+                    </div>
+                </div>
+                <div class="buy">
+                    <img :src="detail.code"/>
+                    <div>微信扫码购买</div>
+                </div>
+            </div>
+            <div class="header">—&nbsp;详情&nbsp;—</div>
+            <div class="details">
+                <img v-for="item in detail?.detail?.detailImg" :src="item">
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 <script type="text/javascript">
+const QRFactory = new QRCode({size:70, dark:'#ff4c4c'});
+const userAgent = navigator.userAgent.toLowerCase();
 const { createApp } = Vue;
 const app = createApp({
 	data() {
 		return {
 			shade: false,
+            mask:  false,
+			category:[],
+			range:{
+				min:'',
+				max:''
+			},
 			where:{
-				
-			}
+				sortType: 0,
+				// minPrice:'',
+				// maxPrice:'',
+                limit: 30,
+				shippingMethods:{
+					express: 0,
+					sameCity: 0,
+					pickup: 0
+				}
+			},
+            network: true,
+            array:[],
+            detail:{},
+            drag:{
+                start:{},
+                end:{}
+            }
 		}
 	},
 	methods:{
-		query(){
-            ajax('/api/app/list.do', {}, (json)=>{
+        scroll(e){
+            // 滚动条高度 - 窗口高度 - 滚动条当前高度
+            if( e.target.scrollHeight - e.target.offsetHeight - e.target.scrollTop<=100 ){
+                if( this.network )
+                    return;
+                this.query();
+            }
+        },
+		query(reset){
+            if( reset )
+                this.array = [];
+            this.network = true;
+            this.where.from = this.array.length;
+            ajax('/api/union/query.json?fine=true', this.where, (json)=>{
                 console.log(json);
-                if( json.code==200 )
-                    this.apps = json.data;
-                else if( json.code==403 )
-                	this.logout();
+                if( json.code==200 ){
+                    json.data.forEach((item, i) => {
+                        this.array[this.array.length] = item;
+                    });
+                }
+            }, 'POST', ()=>{
+                this.network = false;
             });
+            this.shade = false;
+        },
+        maskClose(e){
+            //console.log(e);
+            if( e.target.className.indexOf('mask')>=0 )
+                this.mask = false;
+        },
+        toDetail(obj){
+            this.detail = obj?.product?.info;
+            this.detail.appid = obj.shopInfo.appId;
+            this.detail.productId = obj.productId;
+            console.log(obj);
+            this.mask = true;
+            ajax('/api/union/detail.json', 'pid=oJriM4pmsCRojkAWa9QC_UN2UDh0_1823808719&appid=' + this.detail.appid + '&productId=' + this.detail.productId, (json)=>{
+                console.log(userAgent, json);
+                if( json.code==200 ){
+                    // if( userAgent.indexOf('micromessenger')>0 ){
+                    //     //location.href = json.data[0].shareInfo.couponPromotionTag || json.data[0].shareInfo.promotionTag;
+                    //     location.href = json.data[0].shareInfo.couponPromotionUrl || json.data[0].shareInfo.promotionUrl;
+                    // }else{
+                    //     window.open(json.data[0].shareInfo.couponPromotionUrl || json.data[0].shareInfo.promotionUrl);
+                    // }
+                    this.detail.code = QRFactory.make(json.data[0].shareInfo.couponPromotionUrl || json.data[0].shareInfo.promotionUrl);
+                }
+            }, 'GET');
         }
 	},
 	mounted(){
-		this.query();
-	}
+        this.$nextTick(()=>{
+            window.addEventListener('scroll', this.scroll, true);
+        });
+
+		sessionStorage.setItem('appid', 'wxf758febe11ed1d38');
+        ajax('/api/union/category.json', '', (json)=>{
+            console.log(json);
+            if( json.code==200 )
+                this.category = json.data;
+        }, 'GET');
+        this.query();
+	},
+    updated(){
+        let obj = new Swiper('.swiper', {centeredSlides:true, autoplay:{delay: 3000, disableOnInteraction: false}, pagination:{el: ".swiper-pagination"}});
+        console.log(obj);
+    }
 }).mount('#app');
+
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    try{
+        WeixinJSBridge.call('hideToolbar');
+        //WeixinJSBridge.call('hideOptionMenu');
+    }catch(e){
+    }
+});
 </script>
 </html>

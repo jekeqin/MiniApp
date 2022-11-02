@@ -15,6 +15,7 @@ import top.corz.mini.entity.MpRequest;
 import top.corz.mini.entity.TopApp;
 import top.corz.mini.plugins.FileCache;
 import top.corz.mini.plugins.WeixinApi;
+import top.corz.mini.utils.EncryUtil;
 
 @Component
 public class WeixinComponent {
@@ -80,6 +81,43 @@ public class WeixinComponent {
 		}
 		
 		return JsonResult.Ok(array);
+	}
+	
+	public JsonResult textCheck(String appid, String code, String openid, String text) {
+		if( text==null || text.length()==0 || (code==null && openid==null) )
+			return JsonResult.Ok();
+		
+		String md5 = EncryUtil.MD5.encrypt(text);
+		JsonResult cache = FileCache.getObj("text.check." + md5, JsonResult.class);
+		if( cache!=null )
+			return cache;
+		
+		TopApp app = apps.findApp(appid);
+		if( app==null )
+			return JsonResult.Err("小程序未登记");
+
+		if( openid==null || openid.length()==0 ) {
+			JSONObject co = WeixinApi.Mini.openid(app, code);
+			if( co!=null )
+				openid = co.getString("openid");
+			else
+				return JsonResult.Err("校验失败");
+		}
+
+		JSONObject json = WeixinApi.Mini.textCheck(app, openid, text);
+		if( json==null )
+			return JsonResult.Err("校验失败");
+			
+		JsonResult back = JsonResult.OkExtra(null, text);
+		if( json.containsKey("result") ) {
+			json = json.getJSONObject("result");
+			if( 100 != json.getInteger("label")  )
+				back = JsonResult.Err("存在违规内容", text);
+		}else {
+			return JsonResult.Err(json.getString("errmsg"), text);
+		}
+		FileCache.set("text.check." + md5, back.toString());
+		return back;
 	}
 	
 	public JsonResult weixinRequest(MpRequest obj) {

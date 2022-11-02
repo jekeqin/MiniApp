@@ -1,9 +1,11 @@
-function ajax(url, data, callback, method){
+function ajax(url, data, callback, method, complete){
     console.log('ajax',url, data, method);
     // https://www.jianshu.com/p/536aea258b7f
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState==4){
+            if( complete )
+                complete();
             console.log(xhr);
             if((xhr.status >=200 && xhr.status < 300) || xhr.status ==304){
                 var data = xhr.responseText;
@@ -15,6 +17,7 @@ function ajax(url, data, callback, method){
             }else{
                 console.error('error:'+ xhr.status)
             }
+
         }
     }
     xhr.upload.onprogress = (e)=>{
@@ -25,7 +28,7 @@ function ajax(url, data, callback, method){
     //xhr.timeout = 3000;
     //xhr.withCredentials = false;
 
-    if( method && method=='get' ){
+    if( method && method.toUpperCase() == 'GET' ){
         xhr.open('GET',url + '?' + data);
     }else{
         xhr.open('POST',url, true);
@@ -42,6 +45,7 @@ function ajax(url, data, callback, method){
 		console.error(e);
 	}
 
+    xhr.setRequestHeader('appid', sessionStorage.getItem('appid'));
     if( data && typeof data === 'object' )
         xhr.send( JSON.stringify(data) );
     else

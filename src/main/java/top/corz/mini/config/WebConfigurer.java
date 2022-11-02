@@ -74,11 +74,16 @@ public class WebConfigurer implements WebMvcConfigurer {
 			.addPathPatterns("/**/*.dev")
 			.addPathPatterns("/**/**")
 			
-			.excludePathPatterns("/**/*.json")
+//			.excludePathPatterns("/**/*.json")
 			.excludePathPatterns("/error")
+
 			.excludePathPatterns("/static/**")
 			.excludePathPatterns("/html/**")
 			.excludePathPatterns("/images/**")
+			.excludePathPatterns("/**/*.css")
+			.excludePathPatterns("/**/*.jpg")
+			.excludePathPatterns("/**/*.png")
+			.excludePathPatterns("/**/*.html")
 			;
 	}
 	

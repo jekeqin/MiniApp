@@ -15,11 +15,11 @@
         	<div class="fhead">营销管理</div>
             <div>
                 <div>账号</div>
-                <input v-model="form.username" type="text" maxlength="20" placeholder="请输入登录账号"/>
+                <input v-model="form.username" type="text" maxlength="20" placeholder="请输入登录账号" @keyup.enter="$refs.pass.focus()"/>
             </div>
             <div>
                 <div>密码</div>
-                <input v-model="form.password" type="text" maxlength="20" placeholder="请输入登录密码"/>
+                <input v-model="form.password" type="password" maxlength="20" placeholder="请输入登录密码" @keyup.enter="submit" ref="pass" autocomplete="new-password"/>
             </div>
             <div>
                 <div></div>

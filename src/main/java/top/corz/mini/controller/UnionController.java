@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
@@ -34,6 +35,7 @@ public class UnionController {
 		JSONArray array = FileCache.getJArray("mp.product.cats", 86400);
 		if( array!=null )
 			return JsonResult.Ok(array);
+		
 		TopApp app = apps.findApp(ApiHolder.getAppid());
 		if( app==null )
 			return JsonResult.Err("APP未注册");
@@ -45,7 +47,8 @@ public class UnionController {
 		return JsonResult.Err("网络异常",json);
 	}
 	
-	public Object query(@RequestBody JSONObject data, Boolean fine) throws UnsupportedEncodingException {
+	@RequestMapping("/query.json")
+	public Object query(@RequestBody JSONObject data, @RequestParam(name = "fine", required = false,defaultValue = "false") Boolean fine) throws UnsupportedEncodingException {
 		TopApp app = apps.findApp(ApiHolder.getAppid());
 		if( app==null )
 			return JsonResult.Err("APP未注册");
@@ -56,6 +59,7 @@ public class UnionController {
 		return JsonResult.Err("网络异常",json);
 	}
 	
+	@RequestMapping("/detail.json")
 	public Object detail(String pid, String appid, String productId) {
 		JSONArray array = FileCache.getJArray("mp.product." + appid + "." + productId, 86400);
 		if( array!=null )

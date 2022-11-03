@@ -130,6 +130,41 @@ public class HttpApi {
 		return null;
 	}
 	
+	public JSONObject httpPostForm(String url, JSONObject data)
+	{
+		log.debug("httpPostForm: url:{}, data:{}", url, data);
+		
+		RequestConfig config = RequestConfig.custom()
+				.setConnectionRequestTimeout(2000)		// 连接超时时间，2秒
+				.setConnectTimeout( 10000 )			// 请求超时，5秒
+				.build();
+		CloseableHttpClient http = getClient();
+		HttpPost req = new HttpPost(url);
+		req.setConfig(config);
+
+		List<String> list = new ArrayList<>();
+		for(String key:data.keySet()) {
+			list.add(key + "=" + data.getString(key));
+		}
+		
+		StringEntity se = new StringEntity(String.join("&", list), ContentType.create("application/x-www-form-urlencoded", "utf-8"));
+		se.setContentEncoding("UTF-8");
+		try {
+			req.setEntity(se);
+			CloseableHttpResponse response = http.execute(req);
+			if( HttpStatus.SC_OK == response.getStatusLine().getStatusCode() )
+			{
+				String json = EntityUtils.toString(response.getEntity(), "UTF-8");
+				if( json==null )
+					return null;
+				return JSONObject.parseObject(json);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public JSONObject httpPostStream(String url, InputStream stream, String type, String fileName)
 	{
 		log.debug("httpPost: url:{}", url);

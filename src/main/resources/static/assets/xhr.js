@@ -4,9 +4,9 @@ function ajax(url, data, callback, method, complete){
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = ()=>{
         if(xhr.readyState==4){
+            //console.log(xhr);
             if( complete )
                 complete();
-            console.log(xhr);
             if((xhr.status >=200 && xhr.status < 300) || xhr.status ==304){
                 var data = xhr.responseText;
                 try{
@@ -17,7 +17,6 @@ function ajax(url, data, callback, method, complete){
             }else{
                 console.error('error:'+ xhr.status)
             }
-
         }
     }
     xhr.upload.onprogress = (e)=>{

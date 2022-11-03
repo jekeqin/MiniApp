@@ -69,17 +69,13 @@ public class WebConfigurer implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(interceptor())
-        	.addPathPatterns("/**/*.web")
-			.addPathPatterns("/**/*.do")
-			.addPathPatterns("/**/*.dev")
-			.addPathPatterns("/**/**")
+			.addPathPatterns("/api/**")
 			
-//			.excludePathPatterns("/**/*.json")
 			.excludePathPatterns("/error")
-
 			.excludePathPatterns("/static/**")
 			.excludePathPatterns("/html/**")
 			.excludePathPatterns("/images/**")
+			.excludePathPatterns("/**/*.ico")
 			.excludePathPatterns("/**/*.css")
 			.excludePathPatterns("/**/*.jpg")
 			.excludePathPatterns("/**/*.png")

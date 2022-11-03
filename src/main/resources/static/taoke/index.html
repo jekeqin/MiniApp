@@ -27,7 +27,7 @@
 		</div>
 	</div>
 		
-	<div class="main" :class="(shade||mask)?'hide':''">
+	<div class="main" :class="shade?'hide':''">
 		<div v-if="shade" class="fixed shade">
 			<div class="form">
 				<div class="hor">
@@ -69,13 +69,13 @@
 			</div>
 		</div>
 		<div class="list">
-            <div class="item" v-for="item in array" :key="item.productId" @click="toDetail(item)">
-                <img :src="item.product.info.headImg[0]"/>
+            <div class="item" v-for="item in array" :key="item.item_id" @click="toDetail(item)">
+                <img :src="item.pict_url"/>
                 <div class="info">
-                    <div class="name">{{item.product.info.title}}</div>
+                    <div class="name">{{item.title}}</div>
                     <div class="hor bet">
-                        <div class="price"><span>￥ </span>{{priceScope(item.product.skus)}}</div>
-                        <div class="sale">销量：{{maxSale(item)}}</div>
+                        <div class="price"><span>￥ </span>{{item.zk_final_price}}</div>
+                        <div class="sale">月销：{{item.volume}}</div>
                     </div>
                 </div>
             </div>
@@ -84,46 +84,6 @@
 
     <div v-if="network" class="loading">
         <div><div></div></div>
-    </div>
-
-    <div v-if="mask" class="fixed mask" @click="maskClose">
-        <div class="alert">
-            <div class="swiper heads">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide" v-for="item in detail?.info?.headImg">
-                        <img :src="item"/>
-                    </div>
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-            <div class="info">
-                <div>
-                    <div>
-                        <div class="name">{{detail?.info?.title}}</div>
-                        <!-- <div class="sub">{{detail?.subTitle}}</div> -->
-                        <div class="price"><span>￥ </span>{{priceScope(detail?.skus)}}</div>
-                    </div>
-                    <div class="type">
-                        <span v-for="item in detail?.info?.category">{{item.name}}&nbsp;/&nbsp;</span>
-                    </div>
-                </div>
-                <div class="buy">
-                    <img :src="detail.code"/>
-                    <div>微信扫码购买</div>
-                </div>
-                <div class="skus" v-if="detail?.skus && detail.skus.length>1">
-                    <div class="hor bet" v-for="sku in detail?.skus">
-                        <div class="hor"><img :src="sku.productSkuInfo.thumbImg"/>{{sku.skuName}}</div>
-                        <span>￥{{sku.salePrice}}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="header">—&nbsp;详情&nbsp;—</div>
-            <div class="details">
-                <img v-for="item in detail?.info?.detail?.detailImg" :src="item">
-            </div>
-        </div>
     </div>
 </div>
 </body>
@@ -135,26 +95,16 @@ const app = createApp({
 	data() {
 		return {
 			shade: false,
-            mask:  false,
 			category:[],
-			range:{
-				min:'',
-				max:''
-			},
-			where:{
-				sortType: 0,
-				// minPrice:'',
-				// maxPrice:'',
-                limit: 30,
-				shippingMethods:{
-					express: 0,
-					sameCity: 0,
-					pickup: 0
-				}
-			},
+            where:{
+                material_id: 31362,
+                page_size: 30,
+                page_no: 1,
+                item_id: '',
+                content_id: ''
+            },
             network: true,
-            array:[],
-            detail:{}
+            array:[]
 		}
 	},
 	methods:{
@@ -170,12 +120,11 @@ const app = createApp({
             if( reset )
                 this.array = [];
             this.network = true;
-            this.where.from = this.array.length;
-            ajax('/api/union/query.json?fine=true', this.where, (json)=>{
+            this.where.page_no = parseInt(this.array.length / this.where.page_size) + 1;
+            ajax('/api/taoke/query.json', this.where, (json)=>{
                 console.log(json);
                 if( json.code==200 ){
                     json.data.forEach((item, i) => {
-                        this.skusParse(item.product.skus);
                         this.array[this.array.length] = item;
                     });
                 }
@@ -184,61 +133,20 @@ const app = createApp({
             });
             this.shade = false;
         },
-        priceScope(skus){
-            if( !skus )
-                return ' ?';
-            let min = Math.min.apply(Math, skus.map(o=>o.productSkuInfo.salePrice));
-            let max = Math.max.apply(Math, skus.map(o=>o.productSkuInfo.salePrice));
-            if( min<max )
-                return min + ' ~ ' + max;
-            return min;
-        },
-        skusParse(skus){
-            if( !skus || skus.length<2 )
-                return;
-            skus.forEach(sku=>{
-                if( sku.productSkuInfo.saleParam && sku.productSkuInfo.saleParam[0].categorys.length>1 ){
-                    sku.skuName = sku.productSkuInfo.saleParam[0].categorys[1].name;
-                }
-                sku.salePrice = sku.productSkuInfo.salePrice;
-            });
-        },
-        maxSale(obj){
-            if( obj.product.info.totalSoldNum / obj.product.info.totalOrderNum>3 )
-                return obj.product.info.totalOrderNum;
-            return obj.product.info.totalSoldNum;
-        },
         maskClose(e){
             //console.log(e);
             if( e.target.className.indexOf('mask')>=0 )
                 this.mask = false;
         },
         toDetail(obj){
-            this.detail = obj?.product;
-            this.detail.appid = obj.shopInfo.appId;
-            console.log(this.detail);
-            this.mask = true;
-            ajax('/api/union/detail.json', 'pid=oJriM4pmsCRojkAWa9QC_UN2UDh0_1823808719&appid=' + this.detail.appid + '&productId=' + this.detail.productId, (json)=>{
-                console.log(userAgent, json);
-                if( json.code==200 ){
-                    // if( userAgent.indexOf('micromessenger')>0 ){
-                    //     //location.href = json.data[0].shareInfo.couponPromotionTag || json.data[0].shareInfo.promotionTag;
-                    //     location.href = json.data[0].shareInfo.couponPromotionUrl || json.data[0].shareInfo.promotionUrl;
-                    // }else{
-                    //     window.open(json.data[0].shareInfo.couponPromotionUrl || json.data[0].shareInfo.promotionUrl);
-                    // }
-                    this.detail.code = QRFactory.make(json.data[0].shareInfo.couponPromotionUrl || json.data[0].shareInfo.promotionUrl);
-                }
-            }, 'GET');
+            window.open(obj.click_url);
         }
 	},
 	mounted(){
         this.$nextTick(()=>{
             window.addEventListener('scroll', this.scroll, true);
         });
-
-		sessionStorage.setItem('appid', 'wxf758febe11ed1d38');
-        ajax('/api/union/category.json', '', (json)=>{
+        ajax('/api/taoke/category.json', '', (json)=>{
             console.log(json);
             if( json.code==200 )
                 this.category = json.data;
@@ -247,7 +155,6 @@ const app = createApp({
 	},
     updated(){
         let obj = new Swiper('.swiper', {centeredSlides:true, autoplay:{delay: 3000, disableOnInteraction: false}, pagination:{el: ".swiper-pagination"}});
-        //console.log(obj);
     }
 }).mount('#app');
 

@@ -53,6 +53,10 @@ input:disabled{
 	display: flex;
 	align-items: center;
 }
+.hor.bet{
+    width: 100%;
+    justify-content: space-between;
+}
 
 .search{
 	padding:0px 10px;
@@ -200,6 +204,7 @@ input:checked + span{
 }
 .info{
     padding: 0px 5px;
+    flex-wrap: wrap;
 }
 .info .name{
     font-size: 14px;
@@ -212,11 +217,36 @@ input:checked + span{
 }
 .info .price{
     font-size: 16px;
-    color: red;
+    color: #ff4c4c;
 }
 .info .price span{
     font-size: 13px;
     color: #666;
+}
+.info .sale{
+    color:#999;
+    font-size: 13px;
+}
+.info .skus{
+    width: 100%;
+    border-top:1px solid #f0f0f0;
+}
+.info .skus>div{
+    box-shadow: 0px 0px 2px #999;
+    border-radius: 15px;
+    line-height: 30px;
+    padding: 0px 15px;
+    font-size: 14px;
+    margin:5px 0px;
+    color: #666;
+}
+.info .skus img{
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+.info .skus span{
+    color: #ff4c4c;
 }
 
 .loading{
@@ -269,9 +299,9 @@ input:checked + span{
 }
 .mask .alert .type{
     padding: 10px 0px;
-    border-top:1px solid #f0f0f0;
     font-size: 13px;
     color: #999;
+    border-top:1px solid #f0f0f0;
 }
 .mask .alert .header{
     background-color: #f0f0f0;
@@ -302,7 +332,7 @@ input:checked + span{
 .mask .alert .buy button{
     width: 70px;
     height: 70px;
-    background-color: rgba(255,0,0,0.7);
+    background-color: #ff4c4c;
     color: #fff;
     border:none;
     box-shadow: 0px 0px 2px #666;

@@ -19,6 +19,9 @@ public class TaokeApi {
 	// https://open.taobao.com/api.htm?docId=24518&docType=2
 	// https://market.m.taobao.com/app/qn/toutiao-new/index-pc.html#/detail/10628875?_k=gpov9a
 	
+	// https://pub.alimama.com/portal/v2/home/plus/index.htm?spm=a219t.11816995.cf7687754.1.2a8f6a152w5hK3
+	// https://aff-open.taobao.com/developer/index.htm?spm=a219t.11817172.0.de8776465.27ac6a151kuoHl#/app/33961004/app_app
+	
 	private static HttpApi http = new HttpApi();
 	
 	@Value("${taoke.key}")
@@ -55,9 +58,14 @@ public class TaokeApi {
 		return JsonResult.ErrExtra(json);
 	}
 	
-	public JSONObject optionalQuery() {
-		JSONObject obj = new JSONObject().fluentPut("adzone_id", adzone());
-		return request(taokeApiKey, taokeSecret, "taobao.tbk.dg.material.optional", obj);
+	public JsonResult optionalQuery(JSONObject obj) {
+		obj.fluentPut("adzone_id", adzone()).fluentPut("cat", 0);
+		JSONObject json =  request(taokeApiKey, taokeSecret, "taobao.tbk.dg.material.optional", obj);
+		//JSONObject json =  request(taokeApiKey, taokeSecret, "taobao.tbk.dg.material.temporary.optional", obj);
+		if( json.containsKey("result_list") ) {
+			return JsonResult.Ok(json.getJSONArray("result_list"));
+		}
+		return JsonResult.ErrExtra(json);
 	}
 	
 	public JSONObject getActivity(String materialId) {
@@ -95,6 +103,7 @@ public class TaokeApi {
 		buff.append(apiSecret);
 		
 		obj.put("sign", EncryUtil.MD5.encrypt(buff.toString()));
+		System.out.println(obj);
 	}
 	
 	private static final JSONObject baseJson(String apiKey, String method) {

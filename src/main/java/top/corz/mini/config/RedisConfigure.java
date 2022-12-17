@@ -1,6 +1,5 @@
 package top.corz.mini.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
@@ -15,21 +14,6 @@ import com.alibaba.fastjson.parser.ParserConfig;
 //@Configuration
 public class RedisConfigure extends CachingConfigurerSupport {
 
-	@Value("${spring.redis.host}")
-	private String host;
-	
-	@Value("${spring.redis.port}")
-	private String port;
-	
-	@Value("${spring.redis.password}")
-	private String password;
-	
-	@Value("${spring.redis.database}")
-	private int database;
-	
-	@Value("${spring.redis.timeout}")
-	private int timeout;
-	
 	@Bean
 	public RedisMessageListenerContainer container (RedisConnectionFactory factory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();

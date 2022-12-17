@@ -23,6 +23,6 @@ public class TaokeController {
 	
 	@RequestMapping("/query.json")
 	public Object query(@RequestBody JSONObject json) {
-		return taoke.optimusQuery(json);
+		return taoke.optionalQuery(json);
 	}
 }

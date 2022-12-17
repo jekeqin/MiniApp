@@ -61,7 +61,7 @@ public class WeixinApi {
 				data.fluentPut("expire_type", 1).fluentPut("expire_interval", timeout);
 			}else{
 				if( timeout==null )
-					timeout = (int) (System.currentTimeMillis()/1000 + 1440);
+					timeout = (int) (System.currentTimeMillis()/1000 + 3600);
 				data.fluentPut("expire_type", 0).fluentPut("expire_time", timeout);
 			}
 			

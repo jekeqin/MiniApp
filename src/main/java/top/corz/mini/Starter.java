@@ -20,6 +20,7 @@ import top.corz.mini.utils.HostUtils;
 @ComponentScan(basePackages = {"top"})
 public class Starter {
 
+	// 淘客系统
 	public static void main(String[] args)
 	{
 		String fileName = "miniapp.pid";
